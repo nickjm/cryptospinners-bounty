@@ -29,7 +29,7 @@ Help us identify bugs, vulnerabilities, and exploits in the smart contract such 
 
 ### Rules & Rewards:
 
-- Issues that have already been submitted by another user or are already known to the CryptoSpinners team are not eligible for bounty rewards.
+- Issues that have already been submitted by another user or are already known to the CryptoSpinners team are not eligible for bounty rewards. WE RESERVE THE RIGHT TO TEMPORARILY PAUSE THE BOUNTY IF AN URGENT UPDATE IS NEEDED. Any updates regarding such as situation will be announced on [our Discord](https://discord.gg/wbRas2Q)
 - Bugs and vulnerabilities should only be found using accounts you own and create. Please respect third party applications and understand that an exploit that is not specific to the CryptoSpinners smart contract is not part of the bounty program. Attacks on the network that result in bad behavior are not allowed.
 - The CryptoSpinners website is not part of the bounty program, only the smart contract code included in this repo.
 - The CryptoSpinners bounty program considers a number of variables in determining rewards. Determinations of eligibility, score and all terms related to a reward are at the sole and final discretion of CryptoSpinners team.
