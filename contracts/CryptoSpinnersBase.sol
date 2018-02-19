@@ -46,8 +46,8 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
         uint256 id; // The unique identifier of the spinner
         uint32 energy; // Residual Rotational Energy -- a lifetime XP stat
         uint8 fluxcap; // Flux Capacitance -- a luck-like battle stat
-        uint8 inertia; // Rotational Inertia -- battle stat that decreases advantage of strong opponents
         uint8 friction; // Bearing Friction -- battle stat and xp boost (low friction is better)
+        uint8 inertia; // Rotational Inertia -- battle stat that decreases advantage of strong opponents
         Tier tier; // 4 tiers: common (0), uncommon (1), rare (2), legendary (3). Better tiers have better stats
     }
 
