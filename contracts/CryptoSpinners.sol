@@ -4,8 +4,50 @@ import './CryptoSpinnersBase.sol';
 import 'zeppelin-solidity/contracts/Payment/PullPayment.sol';
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 
+/* Hop on the train!
+
+    ___     ___      ___    ___    _  _
+   / __|   / __|    | _ \  |_ _|  | \| |
+  | (__    \__ \    |  _/   | |   | .` |
+   \___|   |___/   _|_|_   |___|  |_|\_|
+ _|"""""|_|"""""|_| """ |_|"""""|_|"""""|
+ "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
+
+    Contract Structure:
+        Libraries
+            - [Open Zeppelin] SafeMath
+            - SafeMath32
+            - SafeMath16
+        Shared
+            - [Open Zeppelin] Ownable
+            - [Open Zeppelin] PullPayment
+            - AccessControl is Ownable
+                Delineates two additional privileged roles, treasurer and operator
+            - ReleaseCandidate is AccessControl
+                Delineates different phases of contract functionality and privileges
+            - Accounts is PullPayment, AccessControl
+                Facilitates safe withdraws of contract balance
+        Core
+            - ERC721Deed
+                Implements the ERC721 Protocol
+            - CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate
+                Base functionality for storing spinner properties, minting, initial purchases
+            - CryptoSpinners is CryptoSpinnersBase
+                Marketplace for buying and selling
+        Seasons
+            - CryptoSpinnersSeasons is Accounts, ReleaseCandidate
+                Weekly seasons of battling and ETH payouts
+
+    Acknowledgements:
+        Larva Labs (creators of CryptoPunks)
+        Open Zeppelin
+        Contributors to ERC721 standard
+        Eric Stevens
+
+                            - team-cspin */
+
 /**
- * @title CryptoSpinnersMarket
+ * @title CryptoSpinners
  * @author team-cspin
  * @dev This contract defines the native market functionality for CryptoSpinners including bids and asks. The contract
  * developers (technically the treasurer) takes a 2.5% cut, and the omega spinner holders take a 0.5% cut. Inspired by
