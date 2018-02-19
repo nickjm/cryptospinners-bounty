@@ -1,0 +1,26 @@
+{
+  "name": "cryptospinners-bounty",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickjm/cryptospinners-bounty.git"
+  },
+  "author": "team-cspin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickjm/cryptospinners-bounty/issues"
+  },
+  "homepage": "https://github.com/nickjm/cryptospinners-bounty#readme",
+  "dependencies": {
+    "truffle": "^4.0.6",
+    "zeppelin-solidity": "1.6.0"
+  }
+}
