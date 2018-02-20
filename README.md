@@ -14,7 +14,7 @@ Special thank you and credit to CryptoKitties for sharing this bounty program pu
 ### The Scope for this Bounty Program:
 
 This bounty program schedule:
-- Core contract: <b>5:00pm GMT February 18th - 5:00am GMT February 21st, 2017</b>.
+- Core contract: <b>5:00pm GMT February 18th - 5:00am GMT February 22st, 2017</b>.
 - Seasons contract (will be added soon): <b>5:00pm GMT February 20th - 5:00am GMT February 24th, 2017</b>.
 - **Rewards are ONLY distributed if CryptoSpinners generates enough revenue to cover costs**. We have a limited budget, and accordingly will be using our revenue to reward bounty participants. See the Payment Schedule below.
 
@@ -40,7 +40,7 @@ The value of rewards paid out will vary depending on Severity which is calculate
 
 ![Alt text](https://github.com/axiomzen/cryptokitties-bounty/blob/master/owasp_w600.png)
 
-<b>Note: Rewards are at the sole discretion of the CryptoSpinners Team. 1 point currently corresponds to 0.5 USD (paid in ETH) The top 10 people on our leaderboard of accepted bugs with at least 250 points will additionally receive a free spinner available only to successful participants in this bounty program.</b>
+<b>Note: Rewards are at the sole discretion of the CryptoSpinners Team. 1 point currently corresponds to 1 USD (paid in ETH) The top 10 people on our leaderboard of accepted bugs with at least 250 points will additionally receive a free spinner available only to successful participants in this bounty program.</b>
 
 - Critical: up to 1000 points
 - High: up to 500 points
