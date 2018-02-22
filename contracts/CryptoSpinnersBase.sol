@@ -56,7 +56,7 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
     mapping (uint8 => mapping (uint16 => uint256)) public tierToUnassignedPositionToSpinnerId;
     mapping (uint8 => uint16) public tierToNumberOfUnassigned;
 
-    Spinner[] public omegaSpinners;
+    uint256[] public omegaSpinnerIds;
 
     modifier costs(uint price) {
         require(msg.value >= price);
@@ -149,13 +149,11 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
     * @param _spinnerId id of spinner
     * @return uint8[4] array of properties in order (flux capacitance, inertia, friction, tier)
     */
-    function getProperties(uint256 _spinnerId) external view validDeed(_spinnerId) returns(uint8 _fluxcap, uint8 _inertia, uint8 _friction, uint8 _tier) {
-        // Storage or memory?
+    function getProperties(uint256 _spinnerId) external view validDeed(_spinnerId) returns(uint8 _fluxcap, uint8 _friction, uint8 _inertia, uint8 _tier) {
         Spinner storage spinner = spinners[_spinnerId];
-        /* Debug(100, "success entered spinners"); */
         _fluxcap = spinner.fluxcap;
-        _inertia = spinner.inertia;
         _friction = spinner.friction;
+        _inertia = spinner.inertia;
         _tier = uint8(spinner.tier);
     }
 
@@ -175,10 +173,10 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
 
     function _mintSpinner(uint256 _id, bytes32 _imageHash, uint256 _fluxCap, uint256 _friction, uint256 _inertia, uint256 _tier, bool _isReserved) private {
         require(countOfDeeds() < 20000);
-        require(spinners[_id].imageHash != bytes32(0));
+        require(spinners[_id].imageHash == bytes32(0));
         spinners[_id] = Spinner(_imageHash, _id, 1, uint8(_fluxCap), uint8(_friction), uint8(_inertia), Tier(_tier));
         if (_id >= 19990 && _id < 20000) {
-            omegaSpinners.push(spinners[_id]);
+            omegaSpinnerIds.push(_id);
         }
         // add ERC721 deed
         _mint(address(this), _id);
