@@ -253,10 +253,18 @@ contract CryptoSpinners is CryptoSpinnersBase {
     }
 
     function _computeOwnerCut(uint256 _price) internal pure returns (uint256) {
+        if (_price <= HUNDRED_PERCENT) {
+            // Avoid rounding problems and let small sales go untaxed
+            return 0;
+        }
         return _price.mul(OWNER_CUT_POINTS).div(HUNDRED_PERCENT);
     }
 
     function _computeOmegaCut(uint256 _price) internal pure returns (uint256) {
+        if (_price <= HUNDRED_PERCENT) {
+            // Avoid rounding problems and let small sales go untaxed
+            return 0;
+        }
         return _price.mul(OMEGA_CUT_POINTS).div(HUNDRED_PERCENT);
     }
 
@@ -265,10 +273,10 @@ contract CryptoSpinners is CryptoSpinnersBase {
      * @param _price amount to pay the omega spinner owners collectively.
      */
     function _payOmegaHolders(uint256 _price) internal {
-        for (uint i = 0; i < omegaSpinners.length; i++) {
-            address holder = ownerOf(omegaSpinners[i].id);
+        for (uint i = 0; i < omegaSpinnerIds.length; i++) {
+            address holder = ownerOf(omegaSpinnerIds[i]);
             if (holder != address(this)) {
-                uint256 amount = _price.div(omegaSpinners.length);
+                uint256 amount = _price.div(omegaSpinnerIds.length);
                 asyncSend(holder, amount);
             }
         }
