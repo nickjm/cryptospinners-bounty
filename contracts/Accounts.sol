@@ -22,7 +22,6 @@ contract Accounts is PullPayment, AccessControl {
     function transferPartialBalance(address _to, uint256 _amount) public onlyTreasurer {
         // Ensure there is enough balance in the contract, and that this txn doesn't accidentally take anyone else's
         //   allocated funds.
-        require(_amount <= this.balance);
         require(_amount <= this.balance.sub(totalPayments));
         _to.transfer(_amount);
     }

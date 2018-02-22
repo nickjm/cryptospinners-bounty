@@ -3,7 +3,6 @@ pragma solidity ^0.4.18;
 import './ReleaseCandidate.sol';
 import './Accounts.sol';
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-/* import "zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol"; */
 import "./ERC721/ERC721Deed.sol";
 import "./SafeMath32.sol";
 import "./SafeMath16.sol";
@@ -52,15 +51,12 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
     }
 
     // Continous array of spinners: 0, 1, 2, ..., totalDeeds
-    Spinner[] public spinners;
+    mapping (uint256 => Spinner) public spinners;
     // Queues of unassigned spinners, one for each of the four tiers
     mapping (uint8 => mapping (uint16 => uint256)) public tierToUnassignedPositionToSpinnerId;
     mapping (uint8 => uint16) public tierToNumberOfUnassigned;
 
     Spinner[] public omegaSpinners;
-
-    // TODO remove before release
-    event Debug(uint256 position, string message);
 
     modifier costs(uint price) {
         require(msg.value >= price);
@@ -165,32 +161,33 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
 
     /**
      * @dev Creates a new spinner with the specified properties
+     * @param _id the id of the spinner
      * @param _imageHash a SHA256 hash of the spinner's image
      * @param _fluxCap uint256 in range [0, 255]
      * @param _friction uint256 in range [0, 255]
      * @param _inertia uint256 in range [0, 255]
      * @param _tier uint256 in range [0, 3]
-     * @param _isGold bool true iff spinner should be awarded percentages of marketplace sales
+     * @param _isReserved bool true iff spinner should be given to the caller (operator)
      */
-    function mintSpinner(bytes32 _imageHash, uint256 _fluxCap, uint256 _friction, uint256 _inertia, uint256 _tier, bool _isGold, bool _isReserved) public onlyOperator stillMinting {
-        _mintSpinner(_imageHash, _fluxCap, _friction, _inertia, _tier, _isGold, _isReserved);
+    function mintSpinner(uint256 _id, bytes32 _imageHash, uint256 _fluxCap, uint256 _friction, uint256 _inertia, uint256 _tier, bool _isReserved) public onlyOperator stillMinting {
+        _mintSpinner(_id, _imageHash, _fluxCap, _friction, _inertia, _tier, _isReserved);
     }
 
-    function _mintSpinner(bytes32 _imageHash, uint256 _fluxCap, uint256 _friction, uint256 _inertia, uint256 _tier, bool _isOmega, bool _isReserved) private {
-        uint id = spinners.push(Spinner(_imageHash, 0, 1, uint8(_fluxCap), uint8(_friction), uint8(_inertia), Tier(_tier))) - 1;
-        require(id < 65535);
-        spinners[id].id = id;
-        if (_isOmega) {
-            omegaSpinners.push(spinners[id]);
+    function _mintSpinner(uint256 _id, bytes32 _imageHash, uint256 _fluxCap, uint256 _friction, uint256 _inertia, uint256 _tier, bool _isReserved) private {
+        require(countOfDeeds() < 20000);
+        require(spinners[_id].imageHash != bytes32(0));
+        spinners[_id] = Spinner(_imageHash, _id, 1, uint8(_fluxCap), uint8(_friction), uint8(_inertia), Tier(_tier));
+        if (_id >= 19990 && _id < 20000) {
+            omegaSpinners.push(spinners[_id]);
         }
         // add ERC721 deed
-        _mint(address(this), id);
+        _mint(address(this), _id);
         if (_isReserved) {
-            clearApprovalAndTransfer(address(this), msg.sender, id);
+            clearApprovalAndTransfer(address(this), msg.sender, _id);
         } else {
             // last unassigned position in tier set to id
             uint8 tier = uint8(_tier);
-            tierToUnassignedPositionToSpinnerId[tier][tierToNumberOfUnassigned[tier]] = id;
+            tierToUnassignedPositionToSpinnerId[tier][tierToNumberOfUnassigned[tier]] = _id;
             tierToNumberOfUnassigned[tier] = tierToNumberOfUnassigned[tier].add(1);
         }
     }
@@ -198,9 +195,9 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
     /**
      * @dev Creates new spinners with specified properties. See mintSpinner
      */
-    function bulkMintSpinner(bytes32[32] _imageHashes, uint256[32] _fluxCaps, uint256[32] _frictions, uint256[32] _inertias, uint256[32] _tiers, bool[32] _isOmegas, bool[32] _isReserved) external onlyOperator stillMinting {
+    function bulkMintSpinner(uint256[32] _ids, bytes32[32] _imageHashes, uint256[32] _fluxCaps, uint256[32] _frictions, uint256[32] _inertias, uint256[32] _tiers, bool[32] _isReserved) external onlyOperator stillMinting {
         for (uint i = 0; i < 32; i++) {
-            _mintSpinner(_imageHashes[i], _fluxCaps[i], _frictions[i], _inertias[i], _tiers[i], _isOmegas[i], _isReserved[i]);
+            _mintSpinner(_ids[i], _imageHashes[i], _fluxCaps[i], _frictions[i], _inertias[i], _tiers[i], _isReserved[i]);
         }
     }
 

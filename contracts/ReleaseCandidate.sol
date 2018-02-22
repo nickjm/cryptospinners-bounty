@@ -52,7 +52,7 @@ contract ReleaseCandidate is AccessControl {
     }
 
     /**
-     * @dev advances the contract to the next phase (Deployed, Alpha Release, Beta Release, Official Release)
+     * @dev advances the contract to the next phase (Deployed, Beta Release, Official Release)
      */
     function nextState() external onlyOwner {
         if (phase == LaunchPhase.Beta) {
