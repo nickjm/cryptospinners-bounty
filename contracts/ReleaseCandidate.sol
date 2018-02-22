@@ -65,9 +65,8 @@ contract ReleaseCandidate is AccessControl {
 
     /**
      * @dev Transfers the current balance to the owner and terminates the contract.
-     * TODO change to `beforeRelease` before mainnet launch
      */
-    function destroy() public onlyOwner {
+    function destroy() public beforeRelease onlyOwner {
         selfdestruct(owner);
     }
 

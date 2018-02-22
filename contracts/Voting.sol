@@ -6,11 +6,11 @@ import "./ERC721/ERC721.sol";
 
 contract Voting is Ownable {
 
-    ERC721 deedInterface;
+    ERC721 public deedInterface;
     // VOTING_DURATION is hardcoded to a week so that the dev team can't make a malicious update and approve it
     // before community would have time to vote.
-    uint256 constant VOTING_DURATION = 1 hours; // TODO CHANGE TO A WEEK before mainnet launch
-    bool deedContractSet = false;
+    uint256 public constant VOTING_DURATION = 1 weeks;
+    bool public deedContractSet = false;
 
     enum Phase {
         Standby,
@@ -94,7 +94,7 @@ contract Voting is Ownable {
     function finishVoting(uint256 _electionId) external {
         Election storage election = elections[_electionId];
         require(election.phase == Phase.Live);
-        /* require(now >= election.beginVotingTime + VOTING_DURATION); */
+        require(now >= election.beginVotingTime + VOTING_DURATION);
         uint16 votesToApprove = 0;
         uint16 votesToBlock = 0;
         for (uint i = 0; i < deedInterface.countOfDeeds(); i++) {
@@ -116,7 +116,7 @@ contract Voting is Ownable {
      * @param _electionId id of the election to inspect
      * @param _approved the expected result of the election to confirm
      */
-    function getApprovedElectionAddress(uint256 _electionId, bool _approved) external view returns (address _approvedAddress) {
+    function getApprovedElectionAddress(uint256 _electionId, bool _approved) external view returns (address _candidateAddress) {
         Election memory election = elections[_electionId];
         require(election.phase == Phase.Finished);
         require(election.approved == _approved);

@@ -50,7 +50,7 @@ contract CryptoSpinnersBase is ERC721Deed, Accounts, ReleaseCandidate {
         Tier tier; // 4 tiers: common (0), uncommon (1), rare (2), legendary (3). Better tiers have better stats
     }
 
-    // Continous array of spinners: 0, 1, 2, ..., totalDeeds
+    // Continous array of spinners: 0, 1, 2, ..., totalDeeds - 1
     mapping (uint256 => Spinner) public spinners;
     // Queues of unassigned spinners, one for each of the four tiers
     mapping (uint8 => mapping (uint16 => uint256)) public tierToUnassignedPositionToSpinnerId;

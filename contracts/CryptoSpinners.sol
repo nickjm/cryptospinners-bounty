@@ -159,10 +159,10 @@ contract CryptoSpinners is CryptoSpinnersBase {
         Ask memory ask = spinnerAsks[_spinnerId];
         address seller = ask.seller;
         uint ownerCut = _computeOwnerCut(msg.value);
-        uint omegaCut = _computeGoldCut(msg.value);
+        uint omegaCut = _computeOmegaCut(msg.value);
         uint award = msg.value.sub(ownerCut).sub(omegaCut);
         asyncSend(seller, award);
-        _payGoldHolders(omegaCut);
+        _payOmegaHolders(omegaCut);
         // Check for the case where there is a bid from the new owner and refund it.
         // Any other bid can stay in place.
         Bid memory bid = spinnerBids[_spinnerId];
@@ -195,7 +195,7 @@ contract CryptoSpinners is CryptoSpinnersBase {
         // not already owned
         require(currentOwner != msg.sender);
         Bid memory existing = spinnerBids[_spinnerId];
-        require(msg.value >= existing.value);
+        require(msg.value > existing.value);
         if (existing.value > 0) {
             // Refund the failing bid
             asyncSend(existing.bidder, existing.value);
@@ -221,11 +221,11 @@ contract CryptoSpinners is CryptoSpinnersBase {
         spinnerAsks[_spinnerId] = Ask(0x0, 0x0, _spinnerId, 0, false);
         spinnerBids[_spinnerId] = Bid(0x0, _spinnerId, 0, false);
         uint ownerCut = _computeOwnerCut(amount);
-        uint omegaCut = _computeGoldCut(amount);
+        uint omegaCut = _computeOmegaCut(amount);
         uint award = amount.sub(ownerCut).sub(omegaCut);
         clearApprovalAndTransfer(msg.sender, bid.bidder, _spinnerId);
         asyncSend(seller, award);
-        _payGoldHolders(omegaCut);
+        _payOmegaHolders(omegaCut);
         if (spinners[_spinnerId].tier == Tier.Common) {
             commonSpinnerDecayingAveragePrice = commonSpinnerDecayingAveragePrice.mul(95);
             commonSpinnerDecayingAveragePrice = commonSpinnerDecayingAveragePrice.add(amount.mul(5));
@@ -256,7 +256,7 @@ contract CryptoSpinners is CryptoSpinnersBase {
         return _price.mul(OWNER_CUT_POINTS).div(HUNDRED_PERCENT);
     }
 
-    function _computeGoldCut(uint256 _price) internal pure returns (uint256) {
+    function _computeOmegaCut(uint256 _price) internal pure returns (uint256) {
         return _price.mul(OMEGA_CUT_POINTS).div(HUNDRED_PERCENT);
     }
 
@@ -264,7 +264,7 @@ contract CryptoSpinners is CryptoSpinnersBase {
      * @dev Pays owners of the omega spinners their cut. Each omega owner receives `_price / number of omega spinners`
      * @param _price amount to pay the omega spinner owners collectively.
      */
-    function _payGoldHolders(uint256 _price) internal {
+    function _payOmegaHolders(uint256 _price) internal {
         for (uint i = 0; i < omegaSpinners.length; i++) {
             address holder = ownerOf(omegaSpinners[i].id);
             if (holder != address(this)) {

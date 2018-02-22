@@ -1,6 +1,6 @@
 pragma solidity ^0.4.18;
 
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "zeppelin-solidity/contracts/ownership/Claimable.sol";
 
 /**
  * @title AccessControl
@@ -8,7 +8,7 @@ import "zeppelin-solidity/contracts/ownership/Ownable.sol";
  * @dev This contract provides modifiers based on the roles of the sender. Specifically it defines privileged addresses
  * "treasurer" and "operator" which can be set by the owner of the contract.
  */
-contract AccessControl is Ownable {
+contract AccessControl is Claimable {
 
     address public treasurer;
     address public operator;
